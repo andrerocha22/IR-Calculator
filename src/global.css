@@ -1,0 +1,14 @@
+@import url("https://fonts.googleapis.com/css2?family=Muli:wght@400;600;700;900&display=swap");
+
+* {
+  margin: 0;
+  padding: 0;
+  outline: none;
+  box-sizing: border-box;
+  font-family: "Muli", sans-serif;
+}
+
+body {
+  font-family: "Muli", sans-serif;
+  background: linear-gradient(90deg, #A3B1E2 0%, #73C9ED 100%);
+}
