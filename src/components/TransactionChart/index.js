@@ -1,7 +1,11 @@
 import React, { useState, useEffect } from "react";
+import styled from "styled-components";
+
 import {
-  LineChart,
-  Line,
+  ResponsiveContainer,
+  BarChart,
+  Bar,
+  Cell,
   XAxis,
   YAxis,
   CartesianGrid,
@@ -9,39 +13,32 @@ import {
   Legend,
 } from "recharts";
 
+const ChartContainer = styled.div`
+  float: left;
+  width: 100%;
+  height: 100%;
+  padding: 20px 10px;
+  overflow: hidden;
+`;
+
 function TransactionChart(props) {
   const [data, setData] = useState(props.data);
 
   useEffect(() => {
     setData(props.data);
-  },[props.data]);
+  }, [props.data]);
 
-  console.log(data);
   return (
-    <LineChart
-      width={350}
-      height={300}
-      data={data ? data : []}
-      margin={{
-        top: 5,
-        right: 30,
-        left: 20,
-        bottom: 5,
-      }}
-    >
-      <CartesianGrid strokeDasharray="3 3" />
-      <XAxis dataKey="stockCode" />
-      <YAxis />
-      <Tooltip />
-      <Legend />
-      <Line
-        type="monotone"
-        dataKey="quant"
-        stroke="#8884d8"
-        activeDot={{ r: 8 }}
-      />
-      <Line type="monotone" dataKey="uv" stroke="#82ca9d" />
-    </LineChart>
+    <ChartContainer>
+      <ResponsiveContainer width="100%">
+        <BarChart data={data}>
+          <CartesianGrid strokeDasharray="5 5" />
+          <XAxis dataKey="stockCode" />
+          <YAxis />
+          <Bar dataKey="quant" fill="#8884d8" />
+        </BarChart>
+      </ResponsiveContainer>
+    </ChartContainer>
   );
 }
 

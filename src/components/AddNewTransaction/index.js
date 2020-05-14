@@ -7,7 +7,7 @@ function AddNewTransaction(props) {
   const [newTransaction, setNewTransaction] = useState({
     id: uuidv4(),
     stockCode: "PETR4",
-    date: "2020-01-01",
+    date: "",
     operationType: "Compra",
     price: 0,
     quant: 0,
@@ -19,7 +19,7 @@ function AddNewTransaction(props) {
     setNewTransaction({
       id: uuidv4(),
       stockCode: "PETR4",
-      date: "2020-01-01",
+      date: "",
       operationType: "Compra",
       price: "",
       quant: "",
@@ -31,7 +31,7 @@ function AddNewTransaction(props) {
     <Container>
       <AvForm onValidSubmit={handlerSubmit} id="form">
         <Row>
-          <Col xs="auto">
+          <Col xs="6">
             <AvField
               type="select"
               id="select-stock"
@@ -58,25 +58,31 @@ function AddNewTransaction(props) {
               <option>EMBR3</option>
             </AvField>
           </Col>
-          <Col xs="auto">
+          <Col xs="6">
             <AvField
               name="dateInput"
               label="Data da Operação"
               type="date"
               value={newTransaction.date}
               onChange={(e) => {
-                setNewTransaction({ ...newTransaction, date: e.target.value });
+                setNewTransaction({
+                  ...newTransaction,
+                  date: e.target.value,
+                });
               }}
               validate={{
                 required: { value: true, errorMessage: "Adicione a data" },
-                dateRange: {
-                  start: { value: -5, units: "years" },
-                  end: { value: 5, units: "years" },
-                },
+                // dateRange: {
+                //   start: { value: -5, units: "years" },
+                //   end: { value: 5, units: "years" },
+                // },
               }}
             />
           </Col>
-          <Col xs="auto">
+        </Row>
+
+        <Row>
+          <Col xs="6">
             <AvField
               type="select"
               id="select-operation"
@@ -98,10 +104,8 @@ function AddNewTransaction(props) {
               <option>Venda</option>
             </AvField>
           </Col>
-        </Row>
 
-        <Row>
-          <Col xs="auto">
+          <Col xs="6">
             <AvField
               name="priceInput"
               label="Valor da ação"
@@ -116,7 +120,9 @@ function AddNewTransaction(props) {
               }}
             />
           </Col>
-          <Col xs="auto">
+        </Row>
+        <Row>
+          <Col xs="6">
             <AvField
               name="quantInput"
               label="Quantidade"
@@ -134,7 +140,7 @@ function AddNewTransaction(props) {
               }}
             />
           </Col>
-          <Col xs="auto">
+          <Col xs="6">
             <AvField
               name="brockagefeeInput"
               label="Taxa de Corretagem"
