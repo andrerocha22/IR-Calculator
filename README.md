@@ -3,6 +3,7 @@ Mini Projeto - Calculadora Imposto de Renda para operações na bolsa
 ## Available Scripts
 
 In the project directory, you can run:
+### `npm install`
 
 ### `npm start`
 
