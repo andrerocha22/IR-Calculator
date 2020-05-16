@@ -2,10 +2,14 @@ import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Container, Row, Col } from "reactstrap";
 import styled from "styled-components";
-import LogTransitionsTable from "../../components/LogTransitionsTable";
+import OperationsLogTable from "../../components/OperationsLogTable";
 import AddNewTransaction from "../../components/AddNewTransaction";
-import { addTransaction, addStock } from "../../redux/actions/index";
-import TransactionChart from "../../components/TransactionChart";
+import {
+  addTransaction,
+  addStock,
+  removeTransaction,
+} from "../../redux/actions/index";
+import OperationsOverview from "../../components/OperationsOverview";
 
 const PageContainer = styled.div`
   margin-top: 30px;
@@ -97,7 +101,6 @@ function TaxCalculator() {
     let RA = 0;
     let PA = 0;
     let IR = 0;
-    let IRTotal = 0;
 
     const irArray = [];
 
@@ -132,11 +135,11 @@ function TaxCalculator() {
 
             if (RA < 0) {
               PA = Math.abs(PA + RA);
+              IR = 0;
             } else {
               IR = (RA - Math.min(RA, PA)) * 0.15;
               PA = PA - Math.min(RA, PA);
             }
-            IRTotal += IR;
 
             operation.RA = RA;
             operation.PA = PA;
@@ -165,6 +168,15 @@ function TaxCalculator() {
     setActualPosition(irArray);
   };
 
+  const removeItemHandler = (id) => {
+    console.log(id);
+    let objIndexToRemove = transactionsLog.findIndex((obj) => obj.id === id);
+    console.log(objIndexToRemove);
+    if (objIndexToRemove !== -1) {
+      dispatch(removeTransaction(objIndexToRemove));
+    }
+  };
+
   return (
     <PageContainer>
       <Container fluid={true}>
@@ -176,7 +188,10 @@ function TaxCalculator() {
           </Col>
           <Col lg="8" sm={{ size: "auto" }} style={{ marginBottom: "30px" }}>
             <InfoContainer>
-              <LogTransitionsTable content={transactionsLog} />
+              <OperationsLogTable
+                content={transactionsLog}
+                removeHandler={removeItemHandler}
+              />
             </InfoContainer>
           </Col>
         </Row>
@@ -188,7 +203,7 @@ function TaxCalculator() {
           ></Col>
           <Col lg="8" sm={{ size: "auto" }} style={{ marginBottom: "30px" }}>
             <InfoContainer>
-              <TransactionChart data={actualPosition} />
+              <OperationsOverview data={actualPosition} />
             </InfoContainer>
           </Col>
         </Row>

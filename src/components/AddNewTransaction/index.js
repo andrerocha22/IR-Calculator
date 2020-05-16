@@ -4,9 +4,9 @@ import { Row, Col, Container, Button } from "reactstrap";
 import { v4 as uuidv4 } from "uuid";
 import moment from "moment";
 import Select from "react-select";
-import { AiFillPlusCircle } from "react-icons/ai";
 
 function AddNewTransaction(props) {
+  let form = null;
   const [newTransaction, setNewTransaction] = useState({
     id: uuidv4(),
     stockCode: "",
@@ -17,16 +17,18 @@ function AddNewTransaction(props) {
     brockageFee: 0,
   });
 
-  const handlerSubmit = () => {
+  const handlerSubmit = (e) => {
     props.addNewTransaction(newTransaction);
 
     setNewTransaction({
       ...newTransaction,
       id: uuidv4(),
-      price: 0,
-      quant: 0,
-      brockageFee: 0,
+      price: "",
+      quant: "",
+      brockageFee: "",
     });
+
+    form && form.reset();
   };
 
   const stockOptions = [
@@ -67,7 +69,7 @@ function AddNewTransaction(props) {
 
   return (
     <Container>
-      <AvForm onValidSubmit={handlerSubmit} id="frm_id">
+      <AvForm onValidSubmit={handlerSubmit} id="frm_id" ref={(c) => (form = c)}>
         <Row>
           <Col lg="6" sm={{ size: "auto" }}>
             <label>Ação</label>
@@ -111,7 +113,7 @@ function AddNewTransaction(props) {
               name="priceInput"
               label="Valor da ação"
               type="number"
-              placeholder="15"
+              placeholder="0"
               value={newTransaction.price}
               onChange={(e) => {
                 setNewTransaction({ ...newTransaction, price: e.target.value });
@@ -128,7 +130,7 @@ function AddNewTransaction(props) {
               name="quantInput"
               label="Quantidade"
               type="number"
-              placeholder="100"
+              placeholder="0"
               value={newTransaction.quant}
               onChange={(e) => {
                 setNewTransaction({ ...newTransaction, quant: e.target.value });
@@ -146,7 +148,7 @@ function AddNewTransaction(props) {
               name="brockagefeeInput"
               label="Taxa de Corretagem"
               type="number"
-              placeholder="8.75"
+              placeholder="0"
               value={newTransaction.brockageFee}
               onChange={(e) => {
                 setNewTransaction({
@@ -155,13 +157,13 @@ function AddNewTransaction(props) {
                 });
               }}
               validate={{
-                required: { value: true, errorMessage: "Please enter a name" },
+                required: { value: true, errorMessage: "Adicione um valor" },
               }}
             />
           </Col>
           <Col lg="6" sm={{ size: "auto" }}>
             <Button color="primary" style={{ width: "100%" }}>
-              Cadastrar
+              Cadastrar Operação
             </Button>
           </Col>
         </Row>
