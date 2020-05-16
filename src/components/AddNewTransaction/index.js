@@ -2,13 +2,16 @@ import React, { useState } from "react";
 import { AvForm, AvField } from "availity-reactstrap-validation";
 import { Row, Col, Container, Button } from "reactstrap";
 import { v4 as uuidv4 } from "uuid";
+import moment from "moment";
+import Select from "react-select";
+import { AiFillPlusCircle } from "react-icons/ai";
 
 function AddNewTransaction(props) {
   const [newTransaction, setNewTransaction] = useState({
     id: uuidv4(),
-    stockCode: "PETR4",
-    date: "",
-    operationType: "Compra",
+    stockCode: "",
+    date: moment().format("YYYY-MM-DD"),
+    operationType: "",
     price: 0,
     quant: 0,
     brockageFee: 0,
@@ -16,49 +19,65 @@ function AddNewTransaction(props) {
 
   const handlerSubmit = () => {
     props.addNewTransaction(newTransaction);
+
     setNewTransaction({
+      ...newTransaction,
       id: uuidv4(),
-      stockCode: "PETR4",
-      date: "",
-      operationType: "Compra",
-      price: "",
-      quant: "",
-      brockageFee: "",
+      price: 0,
+      quant: 0,
+      brockageFee: 0,
     });
+  };
+
+  const stockOptions = [
+    { value: "PETR4", label: "PETR4" },
+    { value: "VALE3", label: "VALE3" },
+    { value: "ITUB4", label: "ITUB4" },
+    { value: "BBDC4", label: "BBDC4" },
+    { value: "BBAS3", label: "BBAS3" },
+    { value: "JBSS3", label: "JBSS3" },
+    { value: "SUZB3", label: "SUZB3" },
+    { value: "ABEV3", label: "ABEV3" },
+    { value: "RENT3", label: "RENT3" },
+    { value: "ITSA4", label: "ITSA4" },
+    { value: "CIEL3", label: "CIEL3" },
+  ];
+
+  const typeOptions = [
+    { value: "Compra", label: "Compra" },
+    { value: "Venda", label: "Venda" },
+  ];
+
+  const handleChangeTypeOperation = (selectedOption) => {
+    setNewTransaction({
+      ...newTransaction,
+      operationType: selectedOption.value,
+    });
+    console.log(`Option selected:`, selectedOption.value);
+  };
+
+  const handleChangeStockName = (selectedOption) => {
+    setNewTransaction({
+      ...newTransaction,
+      stockCode: selectedOption.value,
+    });
+
+    console.log(`Option selected:`, selectedOption.value);
   };
 
   return (
     <Container>
-      <AvForm onValidSubmit={handlerSubmit} id="form">
+      <AvForm onValidSubmit={handlerSubmit} id="frm_id">
         <Row>
-          <Col xs="6">
-            <AvField
-              type="select"
-              id="select-stock"
-              name="stocknameInput"
-              label="Código da Ação"
-              onClick={() => {
-                var selectedStockCode = document.getElementById("select-stock")
-                  .value;
-                if (selectedStockCode) {
-                  setNewTransaction({
-                    ...newTransaction,
-                    stockCode: selectedStockCode,
-                  });
-                }
-              }}
-            >
-              <option>PETR4</option>
-              <option>VALE5</option>
-              <option>ITUB4</option>
-              <option>BBAS3</option>
-              <option>CRFB3</option>
-              <option>ITSA4</option>
-              <option>JBSS3</option>
-              <option>EMBR3</option>
-            </AvField>
+          <Col lg="6" sm={{ size: "auto" }}>
+            <label>Ação</label>
+            <Select
+              options={stockOptions}
+              onChange={handleChangeStockName}
+              placeholder="Selecione"
+            />
           </Col>
-          <Col xs="6">
+          <Col lg="6" sm={{ size: "auto" }}>
             <AvField
               name="dateInput"
               label="Data da Operação"
@@ -72,45 +91,27 @@ function AddNewTransaction(props) {
               }}
               validate={{
                 required: { value: true, errorMessage: "Adicione a data" },
-                // dateRange: {
-                //   start: { value: -5, units: "years" },
-                //   end: { value: 5, units: "years" },
-                // },
               }}
             />
           </Col>
         </Row>
 
         <Row>
-          <Col xs="6">
-            <AvField
-              type="select"
-              id="select-operation"
-              name="selectInput"
-              label="Tipo de Operação"
-              onClick={() => {
-                var selectedOperation = document.getElementById(
-                  "select-operation"
-                ).value;
-                if (selectedOperation) {
-                  setNewTransaction({
-                    ...newTransaction,
-                    operationType: selectedOperation,
-                  });
-                }
-              }}
-            >
-              <option>Compra</option>
-              <option>Venda</option>
-            </AvField>
+          <Col lg="6" sm={{ size: "auto" }}>
+            <label>Tipo de Operação</label>
+            <Select
+              options={typeOptions}
+              onChange={handleChangeTypeOperation}
+              placeholder="Selecione"
+            />
           </Col>
 
-          <Col xs="6">
+          <Col lg="6" sm={{ size: "auto" }}>
             <AvField
               name="priceInput"
               label="Valor da ação"
               type="number"
-              placeholder="15.50"
+              placeholder="15"
               value={newTransaction.price}
               onChange={(e) => {
                 setNewTransaction({ ...newTransaction, price: e.target.value });
@@ -122,7 +123,7 @@ function AddNewTransaction(props) {
           </Col>
         </Row>
         <Row>
-          <Col xs="6">
+          <Col lg="6" sm={{ size: "auto" }}>
             <AvField
               name="quantInput"
               label="Quantidade"
@@ -140,7 +141,7 @@ function AddNewTransaction(props) {
               }}
             />
           </Col>
-          <Col xs="6">
+          <Col lg="6" sm={{ size: "auto" }}>
             <AvField
               name="brockagefeeInput"
               label="Taxa de Corretagem"
@@ -158,8 +159,12 @@ function AddNewTransaction(props) {
               }}
             />
           </Col>
+          <Col lg="6" sm={{ size: "auto" }}>
+            <Button color="primary" style={{ width: "100%" }}>
+              Cadastrar
+            </Button>
+          </Col>
         </Row>
-        <Button color="primary">Adicionar</Button>
       </AvForm>
     </Container>
   );

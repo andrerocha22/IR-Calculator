@@ -31,7 +31,7 @@ function NavigationBar() {
 
   return (
     <div>
-      <Navbar color="light" light expand="md" fixed="top">
+      <Navbar color="light" light expand="md">
         <NavbarBrand href="/">
           <StyledNavbarBrand>
             {<LogoImg src={logo_calc} alt="logo" />}
@@ -43,8 +43,13 @@ function NavigationBar() {
             <NavItem>
               <NavLink href="/">Home</NavLink>
             </NavItem>
+            <NavItem>
+              <NavLink href="/">Minha conta</NavLink>
+            </NavItem>
+            <NavItem>
+              <NavLink href="/">Ajuda</NavLink>
+            </NavItem>
           </Nav>
-          <NavbarText>Entrar</NavbarText>
         </Collapse>
       </Navbar>
     </div>
