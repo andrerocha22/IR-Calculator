@@ -2,7 +2,6 @@ import React, { useState, useEffect } from "react";
 import { Container, Col, Row, Label } from "reactstrap";
 import styled from "styled-components";
 import moment from "moment";
-import Select from "react-select";
 
 import {
   BarChart,
@@ -44,35 +43,6 @@ const MoreInfoContainer = styled.div`
 function OperationsOverview(props) {
   const [parsedData, setParsedData] = useState([]);
   const [stockOptions, setStockOptions] = useState([]);
-  const [totalTax, setTotalTax] = useState(0);
-  const [totalProfit, settTotalProfit] = useState(0);
-  const [stockCode, setStockCode] = useState("");
-
-  const handleChangeStockName = (selected) => {
-    calculateTotal(selected.value);
-  };
-
-  const calculateTotal = (selectedStock) => {
-    let totalTaxAux = 0;
-    let totalProfitAux = 0;
-    let selected = "";
-
-    if (selectedStock === "") {
-      selected = stockCode;
-    } else {
-      selected = selectedStock;
-    }
-
-    props.data.forEach((element) => {
-      if (element.stock === selected) {
-        totalTaxAux = totalTaxAux + Number(element.IR);
-        totalProfitAux = totalProfitAux + Number(element.RA);
-      }
-    });
-    setTotalTax(Number(totalTaxAux).toFixed(2));
-    settTotalProfit(Number(totalProfitAux).toFixed(2));
-    setStockCode(selected);
-  };
 
   const parseData = () => {
     let aux = [];
@@ -111,42 +81,31 @@ function OperationsOverview(props) {
 
   useEffect(() => {
     parseData();
-    calculateTotal("")
   }, [props]);
 
   const moreInfoHandler = () => {
-    if (stockCode === "") {
-      return (
-        <h4 style={{ textAlign: "start" }}>
-          <span style={{ color: "#9A43DE", lineHeight: "2em" }}>
-            {" "}
-            <strong>Selecione</strong> sua ação
+    return (
+      <h4 style={{ textAlign: "start" }}>
+        <span style={{ color: "#9A43DE", lineHeight: "2em" }}>
+          {" "}
+          <strong>Selecione</strong> sua ação,
+        </span>{" "}
+        <br />
+        <span style={{ color: "#4E8DDC", lineHeight: "1.6em" }}>
+          <strong>Cadastre</strong> suas operações,
+        </span>{" "}
+        <br />{" "}
+        <span
+          style={{ color: "#9A43DE", lineHeight: "1em", fontSize: "0.7em" }}
+        >
+          {" "}
+          E os cálculos pode deixar que <br /> cuidamos para{" "}
+          <span style={{ color: "#4E8DDC", lineHeight: "2em" }}>
+            você!
           </span>{" "}
-          <br />
-          <span style={{ color: "#4E8DDC", lineHeight: "1.6em" }}>
-            <strong>Cadastre</strong> suas operações
-          </span>{" "}
-          <br />{" "}
-          <span
-            style={{ color: "#9A43DE", lineHeight: "1em", fontSize: "0.7em" }}
-          >
-            {" "}
-            E os cálculos pode deixar que <br /> cuidamos para{" "}
-            <span style={{ color: "#4E8DDC", lineHeight: "2em" }}>
-              você!
-            </span>{" "}
-          </span>
-        </h4>
-      );
-    } else {
-      return (
-        <>
-          <h4>Aqui estão algumas informações sobre {stockCode}</h4>
-          <h5>Total de lucro com vendas = R${totalProfit}</h5>
-          <h5>Total de Imposto de Renda = R${totalTax}</h5>
-        </>
-      );
-    }
+        </span>
+      </h4>
+    );
   };
 
   return (
@@ -154,17 +113,6 @@ function OperationsOverview(props) {
       <Container fluid={true}>
         <Row style={{ height: "100%" }}>
           <Col lg="4" sm={{ size: "auto" }}>
-            <Row>
-              <Container>
-                <Label>Selecione um papel para mais detalhes</Label>
-                <Select
-                  options={stockOptions}
-                  onChange={handleChangeStockName}
-                  placeholder="Selecione"
-                  noOptionsMessage={() => "Nenhum resultado encontrado"}
-                />
-              </Container>
-            </Row>
             <Row>
               <MoreInfoContainer>{moreInfoHandler()}</MoreInfoContainer>
             </Row>

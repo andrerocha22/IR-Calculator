@@ -5,8 +5,7 @@ import { v4 as uuidv4 } from "uuid";
 import moment from "moment";
 import Select from "react-select";
 
-function AddNewTransaction(props) {
-  let form = null;
+function AddNewOperation(props) {
   const [newTransaction, setNewTransaction] = useState({
     id: uuidv4(),
     stockCode: "",
@@ -23,12 +22,7 @@ function AddNewTransaction(props) {
     setNewTransaction({
       ...newTransaction,
       id: uuidv4(),
-      price: "",
-      quant: "",
-      brockageFee: "",
     });
-
-    form && form.reset();
   };
 
   const stockOptions = [
@@ -55,7 +49,6 @@ function AddNewTransaction(props) {
       ...newTransaction,
       operationType: selectedOption.value,
     });
-    console.log(`Option selected:`, selectedOption.value);
   };
 
   const handleChangeStockName = (selectedOption) => {
@@ -63,13 +56,11 @@ function AddNewTransaction(props) {
       ...newTransaction,
       stockCode: selectedOption.value,
     });
-
-    console.log(`Option selected:`, selectedOption.value);
   };
 
   return (
     <Container>
-      <AvForm onValidSubmit={handlerSubmit} id="frm_id" ref={(c) => (form = c)}>
+      <AvForm onValidSubmit={handlerSubmit} id="frm_id">
         <Row>
           <Col lg="6" sm={{ size: "auto" }}>
             <label>Ação</label>
@@ -162,7 +153,10 @@ function AddNewTransaction(props) {
             />
           </Col>
           <Col lg="6" sm={{ size: "auto" }}>
-            <Button color="primary" style={{ width: "100%" }}>
+            <Button
+              color="primary"
+              style={{ width: "100%", marginTop: "50px" }}
+            >
               Cadastrar Operação
             </Button>
           </Col>
@@ -172,4 +166,4 @@ function AddNewTransaction(props) {
   );
 }
 
-export default AddNewTransaction;
+export default AddNewOperation;

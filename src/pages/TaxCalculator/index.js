@@ -3,7 +3,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { Container, Row, Col } from "reactstrap";
 import styled from "styled-components";
 import OperationsLogTable from "../../components/OperationsLogTable";
-import AddNewTransaction from "../../components/AddNewTransaction";
+import AddNewOperation from "../../components/AddNewOperation";
 import {
   addTransaction,
   addStock,
@@ -51,7 +51,6 @@ function TaxCalculator() {
   const stocksList = useSelector((state) => state.stocks);
 
   const handleAddNewTransaction = (newTransaction) => {
-    console.log(newTransaction);
     setNewStock(newTransaction);
     setCalculated(false);
 
@@ -125,8 +124,9 @@ function TaxCalculator() {
         } else if (operationType === "Venda") {
           if (QM - quant < 0) {
             alert(
-              `Quantidade para venda nao disponivel! Quantidade atual: ${QM}`
+              `Quantidade para venda não disponivel! Quantidade atual: ${QM}`
             );
+            removeItemHandler(operation.id);
             operation.authorized = false;
           } else {
             RA = (Number(price) - PM) * Number(quant) - Number(brockageFee);
@@ -153,7 +153,6 @@ function TaxCalculator() {
       }
 
       if (operation.IR !== 0) {
-        console.log(irArray);
         irArray.push({
           IR: operation.IR,
           RA: operation.RA,
@@ -164,14 +163,11 @@ function TaxCalculator() {
       }
     });
 
-    console.log(irArray);
     setActualPosition(irArray);
   };
 
   const removeItemHandler = (id) => {
-    console.log(id);
     let objIndexToRemove = transactionsLog.findIndex((obj) => obj.id === id);
-    console.log(objIndexToRemove);
     if (objIndexToRemove !== -1) {
       dispatch(removeTransaction(objIndexToRemove));
     }
@@ -183,7 +179,7 @@ function TaxCalculator() {
         <Row>
           <Col lg="4" sm={{ size: "auto" }} style={{ marginBottom: "30px" }}>
             <CalculatorInput>
-              <AddNewTransaction addNewTransaction={handleAddNewTransaction} />
+              <AddNewOperation addNewTransaction={handleAddNewTransaction} />
             </CalculatorInput>
           </Col>
           <Col lg="8" sm={{ size: "auto" }} style={{ marginBottom: "30px" }}>
